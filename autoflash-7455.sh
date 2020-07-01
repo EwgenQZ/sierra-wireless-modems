@@ -311,11 +311,11 @@ send AT!USBCOMP=$AT_USBCOMP
 sleep 1
 send AT!USBVID=1199
 sleep 1
-send AT!USBPID=9071,9070
+send AT!USBPID=9079,9078
 sleep 1
-send AT!USBPRODUCT=\"EM7455\"
+send AT!USBPRODUCT=\"Sierra Wireless EM7455 Qualcomm Snapdragon X7 LTE-A"
 sleep 1
-send AT!PRIID=\"$AT_PRIID_PN\",\"$AT_PRIID_REV\",\"Generic-Laptop\"
+send AT!PRIID=\"9904609","002.026","Lenovo-Storm"
 sleep 1
 send AT!SELRAT=$AT_SELRAT
 sleep 1
