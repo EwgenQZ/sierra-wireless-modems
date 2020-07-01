@@ -311,7 +311,7 @@ send AT!USBCOMP=$AT_USBCOMP
 sleep 1
 send AT!USBVID=1199
 sleep 1
-send AT!USBPID=9071,9070
+send AT!USBPID=9079,9078
 sleep 1
 send AT!USBPRODUCT=\"EM7455\"
 sleep 1
