@@ -103,9 +103,9 @@ do
  e) AT_FASTENUMEN=${OPTARG};;
  M) set_swi_setusbcomp_trigger=1;;
  g) get_modem_settings_trigger=1;;
- c) clear_modem_firmware_trigger=1;;
- d) download_modem_firmware_trigger=1;;
- f) flash_modem_firmware_trigger=1;;
+ c) clear_modem_firmware_trigger=0;;
+ d) download_modem_firmware_trigger=0;;
+ f) flash_modem_firmware_trigger=0;;
  s) set_modem_settings_trigger=1;;
  a) all_functions_trigger=1;;
  l) SWI9X30C_ZIP='SWI9X30C_02.30.01.01_GENERIC_002.045_001.zip';;
@@ -301,45 +301,16 @@ send ATE1
 sleep 1
 send ATI
 sleep 1
-send AT!ENTERCND=\"A710\"
+send AT!ENTERCND="A710"
 sleep 1
-send AT!IMPREF=\"GENERIC\"
-sleep 1
-send AT!GOBIIMPREF=\"GENERIC\"
-sleep 1
-send AT!USBCOMP=$AT_USBCOMP
-sleep 1
-send AT!USBVID=1199
-sleep 1
-send AT!USBPID=9071,9070
-sleep 1
-send AT!USBPRODUCT=\"EM7455\"
-sleep 1
-send AT!PRIID=\"$AT_PRIID_PN\",\"$AT_PRIID_REV\",\"Generic-Laptop\"
-sleep 1
-send AT!SELRAT=$AT_SELRAT
-sleep 1
-send AT!BAND=$AT_BAND
-sleep 1
-send AT!CUSTOM=\"FASTENUMEN\",$AT_FASTENUMEN
+send AT!CUSTOM="FASTENUMEN",2
 sleep 1
 send AT!PCOFFEN=2
 sleep 1
-send AT!PCOFFEN?
-sleep 1
-send AT!USBSPEED=$AT_USBSPEED
-sleep 1
-send AT!USBSPEED?
-sleep 1
-send AT!USBSPEED=?
-sleep 1
-send AT!CUSTOM?
-sleep 1
-send AT!IMAGE?
-sleep 1
-send AT!PCINFO?
+send AT!USBSPEED=0
 sleep 1
 send AT!RESET
+sleep 1
 ! pkill minicom
 EOF
     sudo minicom -b 115200 -D /dev/"$ttyUSB" -S script.txt &>/dev/null
