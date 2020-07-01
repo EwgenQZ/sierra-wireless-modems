@@ -23,10 +23,10 @@
 
 #.NOTES
 # License: The Unlicense / CCZero / Public Domain
-# Author: Daniel Wood / https://github.com/ewgenqz
+# Author: Daniel Wood / https://github.com/danielewood
 
 #.LINK
-# https://github.com/ewgenqz/sierra-wireless-modems
+# https://github.com/danielewood/sierra-wireless-modems
 
 #.VERSION
 # Version: 20190724
@@ -290,6 +290,64 @@ sleep 1
     sudo minicom -b 115200 -D /dev/"$ttyUSB" -S script.txt &>/dev/null
 }
 
+function download_modem_firmware() {
+    # Find latest 7455 firmware and download it
+    if [[ -z $SWI9X30C_ZIP ]]; then
+        SWI9X30C_ZIP=$(curl https://source.sierrawireless.com/resources/airprime/minicard/74xx/airprime-em_mc74xx-approved-fw-packages/ 2> /dev/null | grep PTCRB -B1 | grep -iEo '7455/swi9x30c[_0-9.]+_generic_[_0-9.]+' | cut -c 6- | tail -n1)
+        SWI9X30C_ZIP="${SWI9X30C_ZIP^^}"'zip'
+    fi
+    SWI9X30C_URL='https://drive.google.com/u/0/uc?export=download&confirm=6r4W&id=1rsZIHq_8iBYtEB3JuaIeXf1rhe5y5bpD"
+    SWI9X30C_LENGTH=$(curl -sI "$SWI9X30C_URL" | grep -i Content-Length | grep -Eo '[0-9]+')
+
+    # If remote file size is less than 40MiB, something went wrong, exit.
+    if [[ $SWI9X30C_LENGTH -lt 40000000 ]]; then
+        printf "${CYAN}---${NC}\n"
+        printf "Download of ${CYAN}$SWI9X30C_ZIP${NC} failed.\nFile size on server is too small, something is wrong, exiting...\n"
+        printf "Attempted download URL was: $SWI9X30C_URL\n"
+        printf "curl info:\n"
+        curl -sI "$SWI9X30C_URL"
+        printf "${CYAN}---${NC}\n"
+        exit
+    fi
+
+    if [[ $SWI9X30C_LENGTH -eq $(stat --printf="%s" "$SWI9X30C_ZIP" 2>/dev/null) ]]; then
+        echo "Already downloaded $SWI9X30C_ZIP..."
+    else
+        echo "Downloading $SWI9X30C_URL"
+        curl -o "$SWI9X30C_ZIP" "$SWI9X30C_URL"
+    fi
+
+    # If download size does not match what server says, exit:
+    if [[ $SWI9X30C_LENGTH -ne $(stat --printf="%s" "$SWI9X30C_ZIP" 2>/dev/null) ]]; then
+        printf "${CYAN}---${NC}\n"
+        printf "Download of ${CYAN}$SWI9X30C_ZIP${NC} failed.\nDownloaded file size is inconsistent with server, exiting...\n"
+        printf "${CYAN}---${NC}\n"
+        exit
+    fi
+
+    # Cleanup old CWE/NVUs
+    rm -f ./*.cwe ./*.nvu 2>/dev/null
+    
+    # Unzip SWI9X30C, force overwrite
+    unzip -o "$SWI9X30C_ZIP"
+}
+
+function flash_modem_firmware() {
+    # Kill cat processes used for monitoring status, if it hasnt already exited
+    sudo pkill -9 cat &>/dev/null
+
+    printf "${CYAN}---${NC}\n"
+    echo "Flashing $SWI9X30C_CWE onto Generic Sierra Modem..."
+    sleep 5
+    qmi-firmware-update --update -d "$deviceid" "$SWI9X30C_CWE" "$SWI9X30C_NVU"
+    rc=$?
+    if [[ $rc != 0 ]]
+    then
+        echo "Firmware Update failed, exiting..."
+        exit $rc
+    fi
+}
+
 function set_modem_settings() {
     # cat the serial port to monitor output and commands. cat will exit when AT!RESET kicks off.
     sudo cat /dev/"$ttyUSB" 2>&1 | tee -a modem.log &  
@@ -311,7 +369,7 @@ send AT!USBCOMP=$AT_USBCOMP
 sleep 1
 send AT!USBVID=1199
 sleep 1
-send AT!USBPID=9079,9078
+send AT!USBPID=9071,9070
 sleep 1
 send AT!USBPRODUCT=\"EM7455\"
 sleep 1
