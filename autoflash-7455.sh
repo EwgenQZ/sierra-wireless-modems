@@ -315,7 +315,7 @@ send AT!USBPID=9079,9078
 sleep 1
 send AT!USBPRODUCT=\"Sierra Wireless EM7455 Qualcomm Snapdragon X7 LTE-A\"
 sleep 1
-send AT!PRIID=\"9904609","002.026","Lenovo-Storm"
+send AT!PRIID=\"9904609","002.026","Lenovo-Storm\"
 sleep 1
 send AT!SELRAT=$AT_SELRAT
 sleep 1
