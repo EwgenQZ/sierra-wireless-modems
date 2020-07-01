@@ -301,16 +301,45 @@ send ATE1
 sleep 1
 send ATI
 sleep 1
-send AT!ENTERCND="A710"
+send AT!ENTERCND=\"A710\"
 sleep 1
-send AT!CUSTOM="FASTENUMEN",2
+send AT!IMPREF=\"GENERIC\"
+sleep 1
+send AT!GOBIIMPREF=\"GENERIC\"
+sleep 1
+send AT!USBCOMP=$AT_USBCOMP
+sleep 1
+send AT!USBVID=1199
+sleep 1
+send AT!USBPID=9079,9078
+sleep 1
+send AT!USBPRODUCT="Sierra Wireless EM7455 Qualcomm Snapdragon X7 LTE-A"
+sleep 1
+send AT!PRIID="9904609","002.026","Lenovo-Storm"
+sleep 1
+send AT!SELRAT=$AT_SELRAT
+sleep 1
+send AT!BAND=$AT_BAND
+sleep 1
+send AT!CUSTOM=\"FASTENUMEN\",$AT_FASTENUMEN
 sleep 1
 send AT!PCOFFEN=2
 sleep 1
-send AT!USBSPEED=0
+send AT!PCOFFEN?
+sleep 1
+send AT!USBSPEED=$AT_USBSPEED
+sleep 1
+send AT!USBSPEED?
+sleep 1
+send AT!USBSPEED=?
+sleep 1
+send AT!CUSTOM?
+sleep 1
+send AT!IMAGE?
+sleep 1
+send AT!PCINFO?
 sleep 1
 send AT!RESET
-sleep 1
 ! pkill minicom
 EOF
     sudo minicom -b 115200 -D /dev/"$ttyUSB" -S script.txt &>/dev/null
