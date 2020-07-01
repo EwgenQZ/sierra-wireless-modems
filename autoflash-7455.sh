@@ -311,9 +311,9 @@ send AT!USBCOMP=$AT_USBCOMP
 sleep 1
 send AT!USBVID=1199
 sleep 1
-send AT!USBPID=9079,9078
+send AT!USBPID=9071,9070
 sleep 1
-send AT!USBPRODUCT=\"Sierra Wireless EM7455 Qualcomm Snapdragon X7 LTE-A\"
+send AT!USBPRODUCT=\"EM7455\"
 sleep 1
 send AT!PRIID=\"$AT_PRIID_PN\",\"$AT_PRIID_REV\",\"Generic-Laptop\"
 sleep 1
