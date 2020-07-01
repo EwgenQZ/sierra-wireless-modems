@@ -3,7 +3,7 @@
 #
 #.USAGE
 # To start, run:
-# wget https://raw.githubusercontent.com/danielewood/sierra-wireless-modems/master/autoflash-7455.sh && sudo bash autoflash-7455.sh
+# wget https://raw.githubusercontent.com/ewgenqz/sierra-wireless-modems/master/autoflash-7455.sh && sudo bash autoflash-7455.sh
 
 #.SYNOPSIS
 # - Only for use on Ubuntu 18 (Bionic) LiveUSB
@@ -23,10 +23,10 @@
 
 #.NOTES
 # License: The Unlicense / CCZero / Public Domain
-# Author: Daniel Wood / https://github.com/danielewood
+# Author: Daniel Wood / https://github.com/ewgenqz
 
 #.LINK
-# https://github.com/danielewood/sierra-wireless-modems
+# https://github.com/ewgenqz/sierra-wireless-modems
 
 #.VERSION
 # Version: 20190724
@@ -296,7 +296,7 @@ function download_modem_firmware() {
         SWI9X30C_ZIP=$(curl https://source.sierrawireless.com/resources/airprime/minicard/74xx/airprime-em_mc74xx-approved-fw-packages/ 2> /dev/null | grep PTCRB -B1 | grep -iEo '7455/swi9x30c[_0-9.]+_generic_[_0-9.]+' | cut -c 6- | tail -n1)
         SWI9X30C_ZIP="${SWI9X30C_ZIP^^}"'zip'
     fi
-    SWI9X30C_URL='https://source.sierrawireless.com/~/media/support_downloads/airprime/74xx/fw/7455/'"$SWI9X30C_ZIP"
+    SWI9X30C_URL='https://source.sierrawireless.com/-/media/support_downloads/airprime/74xx/fw/7455/swi9x30c_02,-d-,33,-d-,03,-d-,00_generic_002,-d-,072_000.ashx"
 
     SWI9X30C_LENGTH=$(curl -sI "$SWI9X30C_URL" | grep -i Content-Length | grep -Eo '[0-9]+')
 
